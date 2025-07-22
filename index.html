@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure AI Services Hub - AI-102 Project</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-brain"></i> Azure AI Services Hub</h1>
+            <p>AI-102 Certification Project - Comprehensive Azure AI Integration</p>
+        </header>
+
+        <!-- Configuration Panel -->
+        <div class="config-panel" id="configPanel">
+            <div class="config-header">
+                <h3><i class="fas fa-cog"></i> Azure Configuration</h3>
+                <button class="config-toggle" onclick="toggleConfig()">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+            <div class="config-content">
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label>OpenAI Endpoint:</label>
+                        <input type="text" id="openaiEndpoint" placeholder="https://your-openai-resource.openai.azure.com/">
+                    </div>
+                    <div class="config-item">
+                        <label>OpenAI API Key:</label>
+                        <input type="password" id="openaiKey" placeholder="Enter your OpenAI API key">
+                    </div>
+                    <div class="config-item">
+                        <label>Document Intelligence Endpoint:</label>
+                        <input type="text" id="docIntelEndpoint" placeholder="https://your-doc-intel.cognitiveservices.azure.com/">
+                    </div>
+                    <div class="config-item">
+                        <label>Document Intelligence Key:</label>
+                        <input type="password" id="docIntelKey" placeholder="Enter your Document Intelligence key">
+                    </div>
+                    <div class="config-item">
+                        <label>Face API Endpoint:</label>
+                        <input type="text" id="faceEndpoint" placeholder="https://your-face-api.cognitiveservices.azure.com/">
+                    </div>
+                    <div class="config-item">
+                        <label>Face API Key:</label>
+                        <input type="password" id="faceKey" placeholder="Enter your Face API key">
+                    </div>
+                    <div class="config-item">
+                        <label>Text Analytics Endpoint:</label>
+                        <input type="text" id="textEndpoint" placeholder="https://your-text-analytics.cognitiveservices.azure.com/">
+                    </div>
+                    <div class="config-item">
+                        <label>Text Analytics Key:</label>
+                        <input type="password" id="textKey" placeholder="Enter your Text Analytics key">
+                    </div>
+                    <div class="config-item">
+                        <label>Vision API Endpoint:</label>
+                        <input type="text" id="visionEndpoint" placeholder="https://your-vision.cognitiveservices.azure.com/">
+                    </div>
+                    <div class="config-item">
+                        <label>Vision API Key:</label>
+                        <input type="password" id="visionKey" placeholder="Enter your Vision API key">
+                    </div>
+                </div>
+                <button class="save-config-btn" onclick="saveConfiguration()">
+                    <i class="fas fa-save"></i> Save Configuration
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="chatbot">
+                <i class="fas fa-comments"></i> OpenAI Chat
+            </button>
+            <button class="tab-btn" data-tab="document">
+                <i class="fas fa-file-alt"></i> Document Intelligence
+            </button>
+            <button class="tab-btn" data-tab="face">
+                <i class="fas fa-user-friends"></i> Face Analysis
+            </button>
+            <button class="tab-btn" data-tab="sentiment">
+                <i class="fas fa-heart"></i> Sentiment Analysis
+            </button>
+            <button class="tab-btn" data-tab="vision">
+                <i class="fas fa-eye"></i> Vision Analysis
+            </button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main class="tab-content">
+            <!-- OpenAI Chatbot Tab -->
+            <div class="tab-pane active" id="chatbot">
+                <div class="service-header">
+                    <h2><i class="fas fa-comments"></i> Azure OpenAI Chatbot</h2>
+                    <p>Interactive conversation with GPT models</p>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                Hello! I'm your Azure OpenAI assistant. How can I help you today?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Type your message here..." maxlength="1000">
+                        <button id="sendMessage" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Intelligence Tab -->
+            <div class="tab-pane" id="document">
+                <div class="service-header">
+                    <h2><i class="fas fa-file-alt"></i> Document Intelligence</h2>
+                    <p>Extract text and structure from documents</p>
+                </div>
+                <div class="upload-section">
+                    <div class="upload-area" onclick="document.getElementById('documentFile').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload PDF or image file</p>
+                        <small>Supported: PDF, PNG, JPEG, BMP, TIFF</small>
+                    </div>
+                    <input type="file" id="documentFile" accept=".pdf,.png,.jpg,.jpeg,.bmp,.tiff" style="display: none;" onchange="handleDocumentUpload(this)">
+                </div>
+                <div class="results-section" id="documentResults"></div>
+            </div>
+
+            <!-- Face Analysis Tab -->
+            <div class="tab-pane" id="face">
+                <div class="service-header">
+                    <h2><i class="fas fa-user-friends"></i> Face Analysis</h2>
+                    <p>Detect and analyze faces in images</p>
+                </div>
+                <div class="upload-section">
+                    <div class="upload-area" onclick="document.getElementById('faceFile').click()">
+                        <i class="fas fa-camera"></i>
+                        <p>Click to upload image file</p>
+                        <small>Supported: PNG, JPEG, BMP, GIF</small>
+                    </div>
+                    <input type="file" id="faceFile" accept=".png,.jpg,.jpeg,.bmp,.gif" style="display: none;" onchange="handleFaceUpload(this)">
+                </div>
+                <div class="results-section" id="faceResults"></div>
+            </div>
+
+            <!-- Sentiment Analysis Tab -->
+            <div class="tab-pane" id="sentiment">
+                <div class="service-header">
+                    <h2><i class="fas fa-heart"></i> Sentiment Analysis</h2>
+                    <p>Analyze emotions and opinions in text</p>
+                </div>
+                <div class="text-input-section">
+                    <textarea id="sentimentText" placeholder="Enter text to analyze sentiment..." rows="6" maxlength="5000"></textarea>
+                    <div class="input-actions">
+                        <span class="char-counter">0/5000</span>
+                        <button onclick="analyzeSentiment()">
+                            <i class="fas fa-search"></i> Analyze Sentiment
+                        </button>
+                    </div>
+                </div>
+                <div class="results-section" id="sentimentResults"></div>
+            </div>
+
+            <!-- Vision Analysis Tab -->
+            <div class="tab-pane" id="vision">
+                <div class="service-header">
+                    <h2><i class="fas fa-eye"></i> Vision Analysis</h2>
+                    <p>Analyze and describe images with AI</p>
+                </div>
+                <div class="upload-section">
+                    <div class="upload-area" onclick="document.getElementById('visionFile').click()">
+                        <i class="fas fa-image"></i>
+                        <p>Click to upload image file</p>
+                        <small>Supported: PNG, JPEG, BMP, GIF</small>
+                    </div>
+                    <input type="file" id="visionFile" accept=".png,.jpg,.jpeg,.bmp,.gif" style="display: none;" onchange="handleVisionUpload(this)">
+                </div>
+                <div class="vision-options">
+                    <label>
+                        <input type="checkbox" id="analyzeObjects" checked> Objects & Tags
+                    </label>
+                    <label>
+                        <input type="checkbox" id="analyzeText" checked> Text (OCR)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="analyzeDescription" checked> Description
+                    </label>
+                </div>
+                <div class="results-section" id="visionResults"></div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Azure AI Services Hub - AI-102 Certification Project</p>
+            <div class="footer-links">
+                <a href="https://docs.microsoft.com/azure/cognitive-services/" target="_blank">
+                    <i class="fas fa-book"></i> Azure AI Documentation
+                </a>
+                <a href="https://github.com" target="_blank">
+                    <i class="fab fa-github"></i> View Source
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
